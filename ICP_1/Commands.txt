@@ -1,0 +1,7 @@
+1. hadoop fs -mkdir icp1
+2. hdfs dfs -put /home/cloudera/Downloads/shakespeare.txt icp1/
+3. hdfs dfs -appendToFile /home/cloudera/Downloads/word_list.txt icp1/shakespeare.txt
+4. hadoop fs -tail icp1/shakespeare.txt
+5. hadoop fs icp1/shakespeare.txt | head
+6. hadoop fs -getmerge icp1/* icp1/finalfile  (final file got created in local machine)
+7. hadoop fs -put icp1/finalfile icp1/ 
