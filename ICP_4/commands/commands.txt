@@ -1,0 +1,73 @@
+
+
+
+QUESTION: 1
+
+create table petrol (distributer_id STRING,distributer_name STRING,amt_IN STRING,amy_OUT STRING,vol_IN INT,vol_OUT INT,year INT) row format delimited fields terminated by ‘,’ stored as textfile;
+
+load data local inpath ‘/home/cloudera/Downloads/petrol.txt’ into table petrol;
+
+select * from petrol;
+
+SELECT distributer_name,SUM(vol_OUT)  FROM  petrol GROUP  BY distributer_name;
+
+SELECT distributer_id,vol_OUT FROM petrol order by vol_OUT desc limit 10;
+
+SELECT distributer_id,vol_OUT FROM petrol order by vol_OUT limit 10;
+
+select distributer_id,year,(vol_IN-vol_OUT) as difference from petrol where (vol_IN-vol_OUT)>500;
+
+ select distributer_id,vol_OUT from petrol CLUSTER by vol_OUT;
+
+select distributer_id,vol_OUT from petrol DISTRIBUTE by vol_OUT;
+
+SELECT distributer_id,vol_OUT FROM petrol SORT by vol_OUT;
+
+
+
+
+QUESTION: 2
+
+
+ create table olympic(athelete STRING,age INT,country STRING,year STRING,closing STRING,sport STRING,gold INT,silver INT,bronze INT,total INT) row format delimited fields terminated by '\t' stored as textfile;
+
+load data local inpath '/home/cloudera/Downloads/olympic_data.csv' into table olympic;
+
+select country,SUM(total) from olympic where sport = "Swimming" GROUP BY country;
+
+select year,SUM(total) from olympic where country = "India" GROUP BY year;
+
+select country,SUM(total) from olympic GROUP BY country;
+
+select country,SUM(gold) from olympic GROUP BY country;
+
+select * from olympic where sport='Shooting' order by year;
+
+
+QUESTION: 3
+
+create table movies(id int, title string,genre string)  row format delimited  fields terminated by ','  stored as textfile;
+
+load data local inpath '/home/cloudera/Downloads/movies.csv' into table movies;
+
+
+create table ratings(userid int,id int,rating int,timestamp string) row format delimited fields terminated by ',' stored as textfile;
+
+load data local inpath '/home/cloudera/Downloads/ratings.csv' into table ratings;
+
+create table users(userid int,gender string,id int,ratingsgiven int,zip string) row format delimited fields terminated by ',' stored as textfile;
+
+load data local inpath '/home/cloudera/Downloads/users.txt' into table users;
+
+
+3-2. select * from movies where genre like '%Drama%' and genre like '%Action%';
+
+3-3.select M.id, MR.rating from movies M join ratings MR on (M.id=MR.id) where MR.rating = 5.0;
+
+3-4.select M.title,avg(MR.rating) as a from movies M join ratings MR on (M.id=MR.id) where M.genre like '%Action%' group by M.title order by a desc limit 11;
+
+
+
+
+
+
