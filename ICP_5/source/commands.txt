@@ -17,7 +17,7 @@ mysql>select * from weights;
 
 mysql>exit;
 
-$sqoop import --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table weights;
+$sqoop import --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table weights;
 
 $sudo service mysqlId start
 
@@ -27,7 +27,7 @@ mysql>create table student(st_id INT, st_name varchar(10), st_weights INT);
 
 mysql>exit;
 
-sqoop export --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table student_weights --export-dir /user/cloudera/weights/part-m-00000
+sqoop export --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table student_weights --export-dir /user/cloudera/weights/part-m-00000
 
 
 Question 2:
@@ -51,7 +51,7 @@ mysql>create table usersNew(st_id INT, st_name varchar(10), st_weights INT);
 
 mysql>exit;
 
-$sqoop export --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table usersNew --export-dir /user/hive/warehouse/hivedb.db/users;
+$sqoop export --connect jdbc:mysql://localhost/db2 --username root --password cloudera --table usersNew --export-dir /user/hive/warehouse/hivedb.db/users;
 
 
 
