@@ -1,0 +1,79 @@
+Question 1:
+
+$sudo service mysqld start
+
+$mysql -u root - pcloudera
+
+mysql>create database db1;
+
+mysql>use db1;
+
+mysql>create table weights(st_id INT, st_name varchar(10), st_weights INT);
+
+mysql>insert into weights values(1, "mike",70), (2,"nancy",50), (3,"max",45);
+
+
+mysql>select * from weights;
+
+mysql>exit;
+
+$sqoop import --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table weights;
+
+$sudo service mysqlId start
+
+$mysql -u root - pcloudera
+
+mysql>create table student(st_id INT, st_name varchar(10), st_weights INT);
+
+mysql>exit;
+
+sqoop export --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table student_weights --export-dir /user/cloudera/weights/part-m-00000
+
+
+Question 2:
+
+
+$hive
+
+hive>create table usersNew(st_id INT, st_name varchar(10), st_weights INT) 
+    > row format delimited
+    > fields terminated by ','
+    > stored as textfile;
+
+hive>load data local inpath '/home/cloudera/Downloads/users' into table usersNew;
+
+
+$sudo service mysqld start
+
+$mysql -u root - pcloudera
+
+mysql>create table usersNew(st_id INT, st_name varchar(10), st_weights INT);
+
+mysql>exit;
+
+$sqoop export --connect jdbc:mysql://localhost/icp5 --username root --password cloudera --table usersNew --export-dir /user/hive/warehouse/hivedb.db/users;
+
+
+
+
+Question 3:
+
+
+i. 
+
+$hive
+
+hive>CREATE TABLE word_count_movies_updated AS
+  > SELECT word, count(1) AS count FROM
+  > (SELECT explode(split(concat_ws(',',cast(id as string),title,genre),',')) AS word FROM movies) w
+  > GROUP BY word
+  > ORDER BY word;
+
+ii. 
+
+hive>analyze table movies compute statistics;
+
+
+iii.
+
+hive>select title from movies where title like '%1995%';
