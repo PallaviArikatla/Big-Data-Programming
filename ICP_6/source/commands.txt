@@ -1,0 +1,45 @@
+QUESTION 1:
+
+Music1
+
+solrctl instancedir --generate /tmp/music1
+ls /tmp/music1/conf/
+gedit /tmp/music1/conf/schema.xml
+solrctl instancedir --create music1 /tmp/music1
+solrctl collection --create music1
+
+keyword matching:
+reviewText:"cable"
+
+wildcard matching
+summary: awesome*
+
+Range:
+overall: [ 3 TO 7]
+
+QUESTION 2:
+
+Books:
+
+solrctl instancedir --generate /tmp/books
+gedit /tmp/books/conf/schema.xml
+solrctl instancedir --create books /tmp/books
+solrctl collection --create books
+
+Range:
+book_price: [ 4 TO 8]
+
+keyword matching:
+author_of_the_book: "George R.R. Martin"
+
+proximity:
+book_name: "A Clash of"~3
+
+sort:
+genre_s: "scifi"    bookprice desc
+
+Fuzzy logic:
+books_inStock: true~
+
+Using AND:
+author_of_the_book: "Lloyd Alexander" AND genre_s: "fantasy"
