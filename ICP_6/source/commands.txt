@@ -3,7 +3,6 @@ QUESTION 1:
 Music1
 
 solrctl instancedir --generate /tmp/music1
-ls /tmp/music1/conf/
 gedit /tmp/music1/conf/schema.xml
 solrctl instancedir --create music1 /tmp/music1
 solrctl collection --create music1
