@@ -1,0 +1,93 @@
+Run to server:
+cassandra.bat -f
+
+Connect to server:
+bin> cqlsh
+
+//Creation of keyspace
+
+CREATE KEYSPACE bdp7 WITH REPLICATION={'class':'SimpleStrategy','replication_factor':3};
+
+
+//use keyspace
+
+ use bdp7;
+
+
+//Creation of employee table
+
+create table emp(employee_id int primary key,department text,lastname text,years_with_company int,hiredate date,jobtitle text,salary int,managerid int);
+
+
+//load data
+
+copy emp(employee_id,department,lastname,years_with_company,hiredate,jobtitle,salary,managerid) from 'C:\Users\Windows 10\Downloads\employee_entries.csv' with HEADER=true
+
+
+//Question-1
+
+
+select * from emp;
+
+
+//Question-2
+
+select lastname,salary from emp where jobtitle='teamlead' allow filtering;
+
+
+
+Insert into bdp7.emp(employee_id,department,lastname,years_with_company,hiredate,jobtitle,salary,managerid)
+values (9, 'Engineering', 'Paul',3,'2018-08-23','clerk',50000,3);
+
+select lastname,salary from emp where jobtitle='clerk' allow filtering;
+
+
+//Question-3
+
+select lastname,jobtitle,salary from emp where hiredate='2000-02-18'allow filtering;
+
+//Question-4
+
+select lastname,salary from emp;
+
+//Question-5
+
+select lastname,salary,managerid from emp where salary=45000 allow filtering;
+
+
+//BONUS QUESTION
+
+
+Question:1
+select lastname from emp where lastname like 's%'; 
+select len(lastname) from emp where lastname like 's%';
+
+
+//create custom index for lastname
+
+CREATE CUSTOM INDEX firstname_idx ON emp (lastname) USING 'org.apache.cassandra.index.sasi.SASIIndex' WITH OPTIONS = {'mode': 'PREFIX', 'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.StandardAnalyzer', 'case_sensitive': 'false'};
+
+
+//create custom function for len
+
+CREATE FUNCTION IF NOT EXISTS len (input text) CALLED ON NULL INPUT RETURNS int LANGUAGE java AS 'return input.length();';
+
+
+//Duplicate:
+
+Drop index IF EXISTS bdp7.firstname_idx;
+
+Question:2 
+
+CREATE FUNCTION IF NOT EXISTS displayname (column TEXT) 
+RETURNS NULL ON NULL INPUT 
+RETURNS text 
+LANGUAGE javascript AS 
+$$ column.charAt(0).toUpperCase() + column.slice(1) $$;
+
+select displayname (lastname) from emp ;
+select displayname (lastname) from emp where lastname like 's%';
+
+
+commands.txt
+Displaying commands.txt.
